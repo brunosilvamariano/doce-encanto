@@ -1,0 +1,185 @@
+/* Status de Funcionamento */
+.restaurant-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 350px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.restaurant-status:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge.open {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    animation: pulse-green 2s infinite;
+}
+
+.status-badge.closed {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    animation: pulse-red 2s infinite;
+}
+
+.status-badge i {
+    font-size: 0.7rem;
+    animation: blink 1.5s infinite;
+}
+
+.status-text {
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+}
+
+.status-details {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.status-details i {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* Animações */
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    50% {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(40, 167, 69, 0);
+    }
+}
+
+@keyframes pulse-red {
+    0%, 100% {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    50% {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 8px rgba(220, 53, 69, 0);
+    }
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0.3;
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .restaurant-status {
+        max-width: 300px;
+        padding: 12px 16px;
+        gap: 6px;
+    }
+    
+    .status-badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .status-text {
+        font-size: 0.9rem;
+    }
+    
+    .status-details {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .restaurant-status {
+        max-width: 280px;
+        padding: 10px 14px;
+    }
+    
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+    
+    .status-text {
+        font-size: 0.85rem;
+    }
+    
+    .status-details {
+        font-size: 0.75rem;
+    }
+}
+
+/* Estados especiais para botões quando fechado */
+.btn-add-to-cart:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+.header-cart-button.disabled {
+    opacity: 0.6 !important;
+    cursor: default !important;
+}
+
+.checkout-btn:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    background: #6c757d !important;
+}
+
+/* Efeito de loading inicial */
+.restaurant-status.loading {
+    opacity: 0.7;
+}
+
+.restaurant-status.loading .status-badge {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    color: white;
+}
+
+.restaurant-status.loading .status-badge i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+

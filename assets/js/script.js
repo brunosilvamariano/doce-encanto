@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar módulo do carrinho
     CartModule.init();
     
+    // Inicializar módulo de status (deve vir após o carrinho)
+    StatusModule.init();
+    
     // Mostrar categoria inicial (brigadeiros)
     UtilsModule.showCategory('brigadeiros');
     

@@ -2,6 +2,12 @@
 const CheckoutModule = {
     // Função para abrir modal de checkout
     openCheckoutModal: function() {
+        // Verificar se o restaurante está aberto
+        if (window.StatusModule && !window.StatusModule.canOrder()) {
+            window.StatusModule.showClosedAlert();
+            return;
+        }
+        
         if (window.cart.length === 0) {
             alert("Seu carrinho está vazio!");
             return;

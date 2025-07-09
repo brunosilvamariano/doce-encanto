@@ -7,6 +7,9 @@
 /* Header - Cabeçalho e logo */
 @import url('./header.css');
 
+/* Status - Indicador de funcionamento */
+@import url('./status.css');
+
 /* Menu - Categorias e itens do menu */
 @import url('./menu.css');
 

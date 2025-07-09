@@ -23,6 +23,12 @@ const CartModule = {
     
     // Função para adicionar item ao carrinho
     addToCart: function(itemName, price) {
+        // Verificar se o restaurante está aberto
+        if (window.StatusModule && !window.StatusModule.canOrder()) {
+            window.StatusModule.showClosedAlert();
+            return;
+        }
+        
         // Verificar se o item já existe no carrinho
         const existingItem = this.cart.find(item => item.name === itemName);
         

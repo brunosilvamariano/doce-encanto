@@ -112,11 +112,11 @@
                     "hasMenuItem": [
                         {
                             "@type": "MenuItem",
-                            "name": "Brigadeiro Tradicional",
-                            "description": "O clássico que todo mundo ama, feito com chocolate nobre e granulado belga",
+                            "name": "Caixinha Brigadeiro Tradicional",
+                            "description": "Caixinha com 4 brigadeiros tradicionais, feitos com chocolate nobre e granulado belga",
                             "offers": {
                                 "@type": "Offer",
-                                "price": "3.50",
+                                "price": "12.00",
                                 "priceCurrency": "BRL"
                             }
                         }
@@ -138,6 +138,18 @@
             </div>
             <h1 class="restaurant-name">Doce Encanto</h1>
             <p class="subtitle">Adoce o seu dia com nossas delícias!</p>
+            
+            <!-- Status de Funcionamento -->
+            <div id="restaurantStatus" class="restaurant-status mt-3 mb-3">
+                <div id="statusBadge" class="status-badge">
+                    <i class="fas fa-circle"></i> VERIFICANDO...
+                </div>
+                <div id="statusText" class="status-text">Verificando horário de funcionamento...</div>
+                <div id="statusDetails" class="status-details">
+                    <i class="fas fa-clock"></i> Aguarde um momento
+                </div>
+            </div>
+            
             <div class="decorative-line"></div>
             
             <!-- Cart Button Below Logo -->
@@ -183,11 +195,11 @@
                                 <img src="assets/images/brigadeiro_tradicional.jpg" alt="Brigadeiro Tradicional" class="food-photo">
                             </div>
                             <div class="item-content">
-                                <h3 class="item-title">Brigadeiro Tradicional</h3>
-                                <p class="item-description">O clássico que todo mundo ama, feito com chocolate nobre e granulado belga.</p>
+                                <h3 class="item-title">Caixinha Brigadeiro Tradicional</h3>
+                                <p class="item-description">Caixinha com 4 brigadeiros tradicionais, feitos com chocolate nobre e granulado belga.</p>
                                 <div class="item-footer">
-                                    <span class="item-price">R$ 3,50</span>
-                                    <button class="btn-add-to-cart" onclick="addToCart('brigadeiro-tradicional', 3.50)">
+                                    <span class="item-price">R$ 12,00</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-tradicional', 12.00)">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -201,11 +213,11 @@
                                 <img src="assets/images/brigadeiro_coco.jpg" alt="Brigadeiro de Coco" class="food-photo">
                             </div>
                             <div class="item-content">
-                                <h3 class="item-title">Brigadeiro de Coco (Beijinho)</h3>
-                                <p class="item-description">Delicioso brigadeiro de coco fresco, coberto com coco ralado.</p>
+                                <h3 class="item-title">Caixinha Brigadeiro de Coco (Beijinho)</h3>
+                                <p class="item-description">Caixinha com 4 deliciosos brigadeiros de coco fresco, cobertos com coco ralado.</p>
                                 <div class="item-footer">
-                                    <span class="item-price">R$ 3,50</span>
-                                    <button class="btn-add-to-cart" onclick="addToCart('brigadeiro-coco', 3.50)">
+                                    <span class="item-price">R$ 12,00</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-coco', 12.00)">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -219,11 +231,11 @@
                                 <img src="assets/images/brigadeiro_churros.jpg" alt="Brigadeiro de Churros" class="food-photo">
                             </div>
                             <div class="item-content">
-                                <h3 class="item-title">Brigadeiro de Churros</h3>
-                                <p class="item-description">Sabor inconfundível de churros, com doce de leite e açúcar com canela.</p>
+                                <h3 class="item-title">Caixinha Brigadeiro de Churros</h3>
+                                <p class="item-description">Caixinha com 4 brigadeiros sabor churros, com doce de leite e açúcar com canela.</p>
                                 <div class="item-footer">
-                                    <span class="item-price">R$ 4,00</span>
-                                    <button class="btn-add-to-cart" onclick="addToCart('brigadeiro-churros', 4.00)">
+                                    <span class="item-price">R$ 12,00</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-churros', 12.00)">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -237,11 +249,11 @@
                                 <img src="assets/images/brigadeiro_limao.jpg" alt="Brigadeiro de Limão" class="food-photo">
                             </div>
                             <div class="item-content">
-                                <h3 class="item-title">Brigadeiro de Limão</h3>
-                                <p class="item-description">Refrescante e delicioso, com raspas de limão siciliano.</p>
+                                <h3 class="item-title">Caixinha Brigadeiro de Limão</h3>
+                                <p class="item-description">Caixinha com 4 refrescantes brigadeiros de limão siciliano, deliciosos e cítricos.</p>
                                 <div class="item-footer">
-                                    <span class="item-price">R$ 3,80</span>
-                                    <button class="btn-add-to-cart" onclick="addToCart('brigadeiro-limao', 3.80)">
+                                    <span class="item-price">R$ 12,00</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-limao', 12.00)">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -552,6 +564,7 @@
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/checkout.js"></script>
     <script src="assets/js/pix.js"></script>
+    <script src="assets/js/status.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>
