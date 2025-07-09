@@ -1,104 +1,84 @@
 // Módulo PIX - Funcionalidades de pagamento via PIX
 const PixModule = {
     // Dados do recebedor PIX
-    pixKey: '33dcc188-1549-49ec-8c5d-917a20d8242e', // sua chave (UUID)
+    pixKey: '33dcc188-1549-49ec-8c5d-917a20d8242e',
     pixName: 'Doce Encanto',
     pixCity: 'JOINVILLE',
-
+    
     // Função para gerar payload PIX completo
-    generatePixPayload: function (value) {
-        const merchantName = this.pixName.toUpperCase();
-        const merchantCity = this.pixCity.toUpperCase();
-        const txid = this.generateTxId();
+    // Função para gerar payload PIX completo (corrigida)
+generatePixPayload: function(value) {
+    function formatEMV(id, value) {
+        const length = value.length.toString().padStart(2, '0');
+        return `${id}${length}${value}`;
+    }
 
-        let payload = '';
+    const merchantName = this.pixName.toUpperCase().slice(0, 25);
+    const merchantCity = this.pixCity.toUpperCase().slice(0, 15);
+    const txid = this.generateTxId();
+    const amount = value.toFixed(2);
 
-        // Payload Format Indicator (ID 00)
-        payload += '000201';
+    const gui = formatEMV("00", "BR.GOV.BCB.PIX");
+    const key = formatEMV("01", this.pixKey);
+    const merchantAccountInfo = formatEMV("26", gui + key);
 
-        // Merchant Account Information (ID 26)
-        const gui = '00' + '14' + 'BR.GOV.BCB.PIX';
-        const pixKeyData = '01' + this.pixKey.length.toString().padStart(2, '0') + this.pixKey;
-        const merchantAccountInformation = gui + pixKeyData;
-        const maiLength = merchantAccountInformation.length.toString().padStart(2, '0');
-        payload += '26' + maiLength + merchantAccountInformation;
+    let payload = '';
+    payload += formatEMV("00", "01");        // Payload Format Indicator
+    payload += formatEMV("01", "12");        // Point of Initiation Method (static)
+    payload += merchantAccountInfo;          // Merchant Account Info
+    payload += formatEMV("52", "0000");      // Merchant Category Code
+    payload += formatEMV("53", "986");       // Transaction Currency (BRL)
+    payload += formatEMV("54", amount);      // Transaction Amount
+    payload += formatEMV("58", "BR");        // Country Code
+    payload += formatEMV("59", merchantName); // Merchant Name
+    payload += formatEMV("60", merchantCity); // Merchant City
+    payload += formatEMV("62", formatEMV("05", txid)); // TXID
 
-        // Merchant Category Code (ID 52) - padrão: 0000
-        payload += '52040000';
+    // CRC16 (ID 63)
+    const payloadForCRC = payload + '6304';
 
-        // Transaction Currency (ID 53) - 986 = BRL
-        payload += '5303986';
+    const crc = this.calculateCRC16(payloadForCRC);
+    payload += '6304' + crc;
 
-        // Transaction Amount (ID 54)
-        const amount = value.toFixed(2);
-        payload += '54' + amount.length.toString().padStart(2, '0') + amount;
+    return payload;
+},
 
-        // Country Code (ID 58)
-        payload += '5802BR';
-
-        // Merchant Name (ID 59)
-        payload += '59' + merchantName.length.toString().padStart(2, '0') + merchantName;
-
-        // Merchant City (ID 60)
-        payload += '60' + merchantCity.length.toString().padStart(2, '0') + merchantCity;
-
-        // Additional Data Field Template (ID 62) - TXID
-        const additionalData = '05' + txid.length.toString().padStart(2, '0') + txid;
-        payload += '62' + additionalData.length.toString().padStart(2, '0') + additionalData;
-
-        // CRC16 (ID 63)
-        const payloadForCRC = payload + '6304';
-        const crc = this.calculateCRC16(payloadForCRC);
-        payload += '6304' + crc;
-
-        return payload;
-    },
-
-    // Geração de TXID válido
-    generateTxId: function () {
-        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    
+    // Função para gerar ID da transação
+    generateTxId: function() {
+        // O txid deve ter entre 26 e 35 caracteres alfanuméricos (a-z, A-Z, 0-9)
+        // Gerar um UUID v4 e remover os hífens para ter um txid válido
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             const r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
         return uuid.replace(/-/g, '').toUpperCase();
     },
-
-    // Cálculo do CRC16-CCITT (XModem)
-    calculateCRC16: function (data) {
+    
+    // Função para calcular CRC16
+    calculateCRC16: function(data) {
         let crc = 0xFFFF;
         const polynomial = 0x1021;
 
         for (let i = 0; i < data.length; i++) {
             crc ^= (data.charCodeAt(i) << 8);
             for (let j = 0; j < 8; j++) {
-                crc = (crc & 0x8000) ? ((crc << 1) ^ polynomial) : (crc << 1);
+                if ((crc & 0x8000) !== 0) {
+                    crc = ((crc << 1) ^ polynomial);
+                } else {
+                    crc <<= 1;
+                }
             }
         }
         return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
     },
-
-    // Função para copiar payload PIX
-    copyPixPayload: function () {
-        const pixPayloadTextarea = document.getElementById("pixPayload");
-        pixPayloadTextarea.select();
-        pixPayloadTextarea.setSelectionRange(0, 99999); // Para dispositivos móveis
-
-        try {
-            document.execCommand("copy");
-            this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
-        } catch (err) {
-            navigator.clipboard.writeText(pixPayloadTextarea.value).then(() => {
-                this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
-            }).catch(() => {
-                this.showNotification("Erro ao copiar código", "error");
-            });
-        }
-    },
-
-    // Função para exibir modal com QR Code / payload
-    showPixModal: function (totalValue, orderData = null) {
+    
+    // Função para mostrar modal PIX
+    showPixModal: function(totalValue, orderData = null) {
         const pixPayload = this.generatePixPayload(totalValue);
+        
+        // Criar modal PIX
         const pixModalHtml = `
             <div class="modal fade" id="pixModal" tabindex="-1" aria-labelledby="pixModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -114,6 +94,7 @@ const PixModule = {
                                 <h6 class="text-primary">Valor a pagar:</h6>
                                 <h4 class="text-success fw-bold">R$ ${totalValue.toFixed(2)}</h4>
                             </div>
+                            
                             <div class="pix-key-section mb-4">
                                 <h6 class="mb-3">Chave PIX (Copie e Cole):</h6>
                                 <div class="input-group mb-2">
@@ -127,6 +108,7 @@ const PixModule = {
                                     <strong>Chave:</strong> ${this.pixKey}
                                 </p>
                             </div>
+                            
                             <div class="pix-instructions">
                                 <div class="alert alert-info">
                                     <h6 class="alert-heading">
@@ -141,6 +123,7 @@ const PixModule = {
                                     </ol>
                                 </div>
                             </div>
+                            
                             <div class="whatsapp-section mt-3">
                                 <button class="btn btn-success btn-lg w-100" onclick="PixModule.sendWhatsAppMessage(${JSON.stringify(orderData).replace(/"/g, '&quot;')})">
                                     <i class="fab fa-whatsapp me-2"></i>
@@ -155,38 +138,84 @@ const PixModule = {
                 </div>
             </div>
         `;
-
+        
         // Remover modal anterior se existir
         const existingModal = document.getElementById("pixModal");
-        if (existingModal) existingModal.remove();
-
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // Adicionar modal ao DOM
         document.body.insertAdjacentHTML("beforeend", pixModalHtml);
+        
+        // Mostrar modal
         const pixModal = new bootstrap.Modal(document.getElementById("pixModal"));
         pixModal.show();
+        
+        // Remover modal do DOM quando fechado
         document.getElementById("pixModal").addEventListener("hidden.bs.modal", function () {
             this.remove();
         });
     },
-
-    // Enviar mensagem no WhatsApp
-    sendWhatsAppMessage: function (orderData = null) {
-        let message = `🏪 *${this.pixName.toUpperCase()}* 🏪\n\n`;
-        if (orderData && orderData.items) {
-            message += `💰 Valor via PIX: R$ ${orderData.total.toFixed(2)}\n\n📋 *PEDIDO:*\n`;
-            orderData.items.forEach(item => {
-                message += `• ${item.quantity}x ${item.name} - R$ ${(item.quantity * item.price).toFixed(2)}\n`;
+    
+    // Função para copiar payload PIX
+    copyPixPayload: function() {
+        const pixPayloadTextarea = document.getElementById("pixPayload");
+        pixPayloadTextarea.select();
+        pixPayloadTextarea.setSelectionRange(0, 99999); // Para dispositivos móveis
+        
+        try {
+            document.execCommand("copy");
+            this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
+        } catch (err) {
+            // Fallback para navegadores mais novos
+            navigator.clipboard.writeText(pixPayloadTextarea.value).then(() => {
+                this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
+            }).catch(() => {
+                this.showNotification("Erro ao copiar código", "error");
             });
-            message += `\n📍 *ENTREGA:*\n👤 Nome: ${orderData.name}\n🏠 Endereço: ${orderData.address}\n💳 Pagamento: PIX\n\n`;
         }
-        message += `👤 Recebedor: ${this.pixName}\n🔑 Chave PIX: ${this.pixKey}\n📎 Enviarei o comprovante!\n`;
-        const url = `https://wa.me/55${this.pixKey}?text=${encodeURIComponent(message)}`;
-        window.open(url, "_blank");
     },
-
-    // Notificações simples na tela
-    showNotification: function (message, type = "info") {
+    
+    // Função para enviar mensagem WhatsApp
+    sendWhatsAppMessage: function(orderData = null) {
+        let message = `🏪 *DOCE ENCANTO* 🏪\n\n`;
+        
+        if (orderData && orderData.items && orderData.items.length > 0) {
+            // Incluir informações do pedido
+            message += `💰 Realizarei o pagamento via PIX no valor de R$ ${orderData.total.toFixed(2)}\n\n`;
+            message += `📋 *ITENS DO PEDIDO:*\n`;
+            
+            orderData.items.forEach(item => {
+                const itemName = window.CartModule ? window.CartModule.getItemDisplayName(item.name) : item.name;
+                message += `• ${item.quantity}x ${itemName} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+            
+            message += `\n📍 *DADOS PARA ENTREGA:*\n`;
+            message += `👤 Nome: ${orderData.name}\n`;
+            message += `🏠 Endereço: ${orderData.address}\n`;
+            message += `💳 Pagamento: PIX\n\n`;
+        } else {
+            // Mensagem padrão (fallback)
+            message += `💰 Realizarei o pagamento via PIX no valor de R$ ${window.cartTotal ? window.cartTotal.toFixed(2) : '0.00'}\n\n`;
+        }
+        
+        message += `👤 Recebedor: ${this.pixName}\n`;
+        message += `📱 Chave PIX: ${this.pixKey}\n\n`;
+        message += `📄 Vou enviar o comprovante de pagamento.\n\n`;
+        message += `⏰ Assim que enviar o anexo, Aguardo confirmação do pedido!`;
+        
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/55${this.pixKey}?text=${encodedMessage}`;
+        
+        window.open(whatsappUrl, "_blank");
+    },
+    
+    // Função para mostrar notificações
+    showNotification: function(message, type = "info") {
         const notification = document.createElement("div");
         const bgColor = type === "success" ? "#28a745" : type === "error" ? "#dc3545" : "#17a2b8";
+        
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -203,15 +232,27 @@ const PixModule = {
             font-weight: 500;
             max-width: 300px;
         `;
+        
         notification.innerHTML = `<i class="fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i> ${message}`;
+        
         document.body.appendChild(notification);
-        setTimeout(() => { notification.style.transform = "translateX(0)"; }, 100);
+        
+        // Animar entrada
+        setTimeout(() => {
+            notification.style.transform = "translateX(0)";
+        }, 100);
+        
+        // Remover após 4 segundos
         setTimeout(() => {
             notification.style.transform = "translateX(400px)";
-            setTimeout(() => { if (notification) document.body.removeChild(notification); }, 300);
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
         }, 4000);
     }
 };
 
-// Exportar para uso global
+// Exportar módulo para uso global
 window.PixModule = PixModule;
