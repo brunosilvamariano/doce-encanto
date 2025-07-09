@@ -6,7 +6,7 @@ const StatusModule = {
         0: { open: '10:00', close: '17:00' }, // Domingo
         1: { open: '09:00', close: '18:00' }, // Segunda
         2: { open: '09:00', close: '24:00' }, // Terça
-        3: { open: '09:00', close: '18:00' }, // Quarta
+        3: { open: '09:00', close: '20:00' }, // Quarta
         4: { open: '09:00', close: '18:00' }, // Quinta
         5: { open: '09:00', close: '19:00' }, // Sexta
         6: { open: '09:00', close: '19:00' }  // Sábado
