@@ -7,55 +7,41 @@ const PixModule = {
     
     // Função para gerar payload PIX completo
     generatePixPayload: function(value) {
-        const merchantName = this.pixName.toUpperCase();
-        const merchantCity = this.pixCity.toUpperCase();
-        const txid = this.generateTxId();
-        
-        // Construir payload PIX seguindo o padrão EMV
-        let payload = '';
-        
-        // Payload Format Indicator
-        payload += '000201';
-        
-        // Merchant Account Information (ID 26)
-        const gui = '0014BR.GOV.BCB.PIX';
-        const pixKeyId = '01';
-        const pixKeyLength = this.pixKey.length.toString().padStart(2, '0');
-        const pixKeyData = `${pixKeyId}${pixKeyLength}${this.pixKey}`;
-        const merchantAccountInformation = `${gui}${pixKeyData}`;
-        const merchantAccountInformationLength = merchantAccountInformation.length.toString().padStart(2, '0');
-        payload += `26${merchantAccountInformationLength}${merchantAccountInformation}`;
-        
-        // Merchant Category Code (ID 52)
-        payload += '52040000';
-        
-        // Transaction Currency (ID 53)
-        payload += '5303986';
-        
-        // Transaction Amount (ID 54)
-        const amount = value.toFixed(2);
-        payload += '54' + amount.length.toString().padStart(2, '0') + amount;
-        
-        // Country Code (ID 58)
-        payload += '5802BR';
-        
-        // Merchant Name (ID 59)
-        payload += '59' + merchantName.length.toString().padStart(2, '0') + merchantName;
-        
-        // Merchant City (ID 60)
-        payload += '60' + merchantCity.length.toString().padStart(2, '0') + merchantCity;
-        
-        // Additional Data Field Template (ID 62)
-        const additionalData = '05' + txid.length.toString().padStart(2, '0') + txid;
-        payload += '62' + additionalData.length.toString().padStart(2, '0') + additionalData;
-        
-        // CRC16 (ID 63) - calculate CRC over the payload *including* '6304' but *before* adding the CRC value
-        const payloadForCRC = payload + '6304'; // Add '6304' for CRC calculation
-        const crc = this.calculateCRC16(payloadForCRC);
-        payload += '6304' + crc;
-        
-        return payload;
+    const merchantName = this.pixName.toUpperCase();
+    const merchantCity = this.pixCity.toUpperCase();
+    const txid = this.generateTxId();
+    const amount = value.toFixed(2);
+
+    // Função auxiliar para montar campo EMV
+    const emv = (id, value) =>
+        id + value.length.toString().padStart(2, '0') + value;
+
+    // Montar Merchant Account Information (ID 26)
+    const gui = emv("00", "BR.GOV.BCB.PIX");
+    const key = emv("01", this.pixKey);
+    const description = emv("02", "Pagamento");
+    const merchantAccountInfo = gui + key + description;
+    const field26 = emv("26", merchantAccountInfo);
+
+    // Montar restante do payload
+    const payload =
+        emv("00", "01") + // Payload Format Indicator
+        field26 +
+        emv("52", "0000") + // Merchant Category Code
+        emv("53", "986") +  // Currency: BRL
+        emv("54", amount) + // Valor
+        emv("58", "BR") +   // País
+        emv("59", merchantName) +
+        emv("60", merchantCity) +
+        emv("62", emv("05", txid)); // txid
+
+    // Calcular CRC16
+    const fullPayload = payload + "6304";
+    const crc = this.calculateCRC16(fullPayload);
+
+    return fullPayload + crc;
     },
+
     
     // Função para gerar ID da transação
     generateTxId: function() {
@@ -195,7 +181,7 @@ const PixModule = {
         
         if (orderData && orderData.items && orderData.items.length > 0) {
             // Incluir informações do pedido
-            message += `💰 Realizei o pagamento via PIX no valor de R$ ${orderData.total.toFixed(2)}\n\n`;
+            message += `💰 Realizarei o pagamento via PIX no valor de R$ ${orderData.total.toFixed(2)}\n\n`;
             message += `📋 *ITENS DO PEDIDO:*\n`;
             
             orderData.items.forEach(item => {
@@ -209,7 +195,7 @@ const PixModule = {
             message += `💳 Pagamento: PIX\n\n`;
         } else {
             // Mensagem padrão (fallback)
-            message += `💰 Realizei o pagamento via PIX no valor de R$ ${window.cartTotal ? window.cartTotal.toFixed(2) : '0.00'}\n\n`;
+            message += `💰 Realizarei o pagamento via PIX no valor de R$ ${window.cartTotal ? window.cartTotal.toFixed(2) : '0.00'}\n\n`;
         }
         
         message += `👤 Recebedor: ${this.pixName}\n`;
