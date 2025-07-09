@@ -10,53 +10,63 @@ const PixModule = {
         const merchantName = this.pixName.toUpperCase();
         const merchantCity = this.pixCity.toUpperCase();
         const txid = this.generateTxId();
-        const pixKey = this.pixKey;
         
         // Construir payload PIX seguindo o padrão EMV
         let payload = '';
         
         // Payload Format Indicator
-        payload += '00020126';
+        payload += '000201';
         
-        // Merchant Account Information
-        payload += '26';
-        const pixData = `0014BR.GOV.BCB.PIX01${pixKey.length.toString().padStart(2, '0')}${pixKey}`;
-        payload += pixData.length.toString().padStart(2, '0') + pixData;
+        // Merchant Account Information (ID 26)
+        const gui = '0014BR.GOV.BCB.PIX';
+        const pixKeyId = '01';
+        const pixKeyLength = this.pixKey.length.toString().padStart(2, '0');
+        const pixKeyData = `${pixKeyId}${pixKeyLength}${this.pixKey}`;
+        const merchantAccountInformation = `${gui}${pixKeyData}`;
+        const merchantAccountInformationLength = merchantAccountInformation.length.toString().padStart(2, '0');
+        payload += `26${merchantAccountInformationLength}${merchantAccountInformation}`;
         
-        // Merchant Category Code
+        // Merchant Category Code (ID 52)
         payload += '52040000';
         
-        // Transaction Currency
+        // Transaction Currency (ID 53)
         payload += '5303986';
         
-        // Transaction Amount
+        // Transaction Amount (ID 54)
         const amount = value.toFixed(2);
         payload += '54' + amount.length.toString().padStart(2, '0') + amount;
         
-        // Country Code
+        // Country Code (ID 58)
         payload += '5802BR';
         
-        // Merchant Name
+        // Merchant Name (ID 59)
         payload += '59' + merchantName.length.toString().padStart(2, '0') + merchantName;
         
-        // Merchant City
+        // Merchant City (ID 60)
         payload += '60' + merchantCity.length.toString().padStart(2, '0') + merchantCity;
         
-        // Additional Data Field Template
+        // Additional Data Field Template (ID 62)
         const additionalData = '05' + txid.length.toString().padStart(2, '0') + txid;
         payload += '62' + additionalData.length.toString().padStart(2, '0') + additionalData;
         
-        // CRC16
-        payload += '6304';
-        const crc = this.calculateCRC16(payload);
-        payload += crc;
+        // CRC16 (ID 63) - calculate CRC over the payload *including* '6304' but *before* adding the CRC value
+        const payloadForCRC = payload + '6304'; // Add '6304' for CRC calculation
+        const crc = this.calculateCRC16(payloadForCRC);
+        payload += '6304' + crc;
         
         return payload;
     },
     
     // Função para gerar ID da transação
     generateTxId: function() {
-        return Math.random().toString(36).substring(2, 15).toUpperCase();
+        // O txid deve ter entre 26 e 35 caracteres alfanuméricos (a-z, A-Z, 0-9)
+        // Gerar um UUID v4 e remover os hífens para ter um txid válido
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+        return uuid.replace(/-/g, '').toUpperCase();
     },
     
     // Função para calcular CRC16
@@ -258,4 +268,5 @@ const PixModule = {
 
 // Exportar módulo para uso global
 window.PixModule = PixModule;
+
 
