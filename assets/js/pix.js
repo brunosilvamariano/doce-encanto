@@ -1,7 +1,7 @@
 // Módulo PIX - Funcionalidades de pagamento via PIX
 const PixModule = {
     // Dados do recebedor PIX
-    pixKey: '47991597258',
+    pixKey: '22801230880',
     pixName: 'Bruno Mariano Silva',
     pixCity: 'SAO PAULO',
     
@@ -269,5 +269,3 @@ const PixModule = {
 
 // Exportar módulo para uso global
 window.PixModule = PixModule;
-
-
