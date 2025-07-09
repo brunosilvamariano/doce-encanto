@@ -47,10 +47,11 @@ const PixModule = {
         
         // Additional Data Field Template (ID 62)
         const additionalData = '05' + txid.length.toString().padStart(2, '0') + txid;
-        payload += '62' + additionalData.length.toString().padStart(2, '0') + additionalData;
+        payload += '62' + additionalData.length.to        const txid = this.generateTxId();
         
-        // CRC16 (ID 63) - calculate CRC over the payload *including* '6304' but *before* adding the CRC value
-        const payloadForCRC = payload + '6304'; // Add '6304' for CRC calculation
+        // Additional Data Field Template (ID 62)
+        const additionalData = '05' + txid.length.toString().padStart(2, '0') + txid;
+        payload += '62' + additionalData.length.toString().padStart(2, '0') + additionalData;ayloadForCRC = payload + '6304'; // Add '6304' for CRC calculation
         const crc = this.calculateCRC16(payloadForCRC);
         payload += '6304' + crc;
         
@@ -72,19 +73,18 @@ const PixModule = {
     // Função para calcular CRC16
     calculateCRC16: function(data) {
         let crc = 0xFFFF;
-        const polynomial = 0x1021;
-
         for (let i = 0; i < data.length; i++) {
-            crc ^= (data.charCodeAt(i) << 8);
+            crc ^= data.charCodeAt(i) << 8;
             for (let j = 0; j < 8; j++) {
-                if ((crc & 0x8000) !== 0) {
-                    crc = ((crc << 1) ^ polynomial);
+                if (crc & 0x8000) {
+                    crc = (crc << 1) ^ 0x1021;
                 } else {
-                    crc <<= 1;
+                    crc = crc << 1;
                 }
+                crc &= 0xFFFF;
             }
         }
-        return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+        return crc.toString(16).toUpperCase().padStart(4, '0');
     },
     
     // Função para mostrar modal PIX
