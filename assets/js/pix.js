@@ -244,7 +244,7 @@ const PixModule = {
         
         const encodedMessage = encodeURIComponent(message);
         // Usar número de telefone genérico para WhatsApp
-        const whatsappUrl = `https://wa.me/5547999999999?text=${encodedMessage}`;
+        const whatsappUrl = `https://wa.me/5547991597258?text=${encodedMessage}`;
         
         window.open(whatsappUrl, "_blank");
     },
