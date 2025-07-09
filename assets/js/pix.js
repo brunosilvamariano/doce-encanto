@@ -19,7 +19,7 @@ const PixModule = {
         
         // Merchant Account Information (ID 26)
         const gui = '0014BR.GOV.BCB.PIX';
-        const pixKeyId = '01';
+        const pixKeyId = '04';
         const pixKeyLength = this.pixKey.length.toString().padStart(2, '0');
         const pixKeyData = `${pixKeyId}${pixKeyLength}${this.pixKey}`;
         const merchantAccountInformation = `${gui}${pixKeyData}`;
@@ -72,18 +72,19 @@ const PixModule = {
     // Função para calcular CRC16
     calculateCRC16: function(data) {
         let crc = 0xFFFF;
+        const polynomial = 0x1021;
+
         for (let i = 0; i < data.length; i++) {
-            crc ^= data.charCodeAt(i) << 8;
+            crc ^= (data.charCodeAt(i) << 8);
             for (let j = 0; j < 8; j++) {
-                if (crc & 0x8000) {
-                    crc = (crc << 1) ^ 0x1021;
+                if ((crc & 0x8000) !== 0) {
+                    crc = ((crc << 1) ^ polynomial);
                 } else {
-                    crc = crc << 1;
+                    crc <<= 1;
                 }
-                crc &= 0xFFFF;
             }
         }
-        return crc.toString(16).toUpperCase().padStart(4, '0');
+        return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
     },
     
     // Função para mostrar modal PIX
