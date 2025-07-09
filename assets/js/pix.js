@@ -1,9 +1,9 @@
 // Módulo PIX - Funcionalidades de pagamento via PIX
 const PixModule = {
     // Dados do recebedor PIX
-    pixKey: '22801230880',
-    pixName: 'Bruno Mariano Silva',
-    pixCity: 'SAO PAULO',
+    pixKey: '33dcc188-1549-49ec-8c5d-917a20d8242e',
+    pixName: 'Doce Encanto',
+    pixCity: 'JOINVILLE',
     
     // Função para gerar payload PIX completo
     generatePixPayload: function(value) {
@@ -19,7 +19,7 @@ const PixModule = {
         
         // Merchant Account Information (ID 26)
         const gui = '0014BR.GOV.BCB.PIX';
-        const pixKeyId = '04';
+        const pixKeyId = '01';
         const pixKeyLength = this.pixKey.length.toString().padStart(2, '0');
         const pixKeyData = `${pixKeyId}${pixKeyLength}${this.pixKey}`;
         const merchantAccountInformation = `${gui}${pixKeyData}`;
