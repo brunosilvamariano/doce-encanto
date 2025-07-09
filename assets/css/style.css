@@ -1,0 +1,21 @@
+/* Arquivo CSS principal - Doce Encanto */
+/* Importação de módulos CSS organizados por seção */
+
+/* Base - Reset e configurações gerais */
+@import url('./base.css');
+
+/* Header - Cabeçalho e logo */
+@import url('./header.css');
+
+/* Menu - Categorias e itens do menu */
+@import url('./menu.css');
+
+/* Cart - Carrinho de compras */
+@import url('./cart.css');
+
+/* Modal - Modais de checkout e PIX */
+@import url('./modal.css');
+
+/* Footer - Rodapé */
+@import url('./footer.css');
+
