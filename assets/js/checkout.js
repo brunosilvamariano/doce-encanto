@@ -120,9 +120,15 @@ const CheckoutModule = {
             const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
             checkoutModal.hide();
             
+            // Limpar carrinho (igual ao comportamento do crédito)
+            CartModule.clearCart();
+            
+            // Limpar formulário
+            form.reset();
+            
             // Mostrar modal PIX
             setTimeout(() => {
-                PixModule.showPixModal(window.cartTotal);
+                PixModule.showPixModal(window.orderData.total, window.orderData);
             }, 500);
             
             return;

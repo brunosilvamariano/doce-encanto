@@ -1,41 +1,53 @@
 // Módulo PIX - Funcionalidades de pagamento via PIX
 const PixModule = {
-    // Número PIX padrão
-    pixNumber: '47991597258',
+    // Dados do recebedor PIX
+    pixKey: '47991597258',
+    pixName: 'Bruno Mariano Silva',
+    pixCity: 'SAO PAULO',
     
-    // Função para gerar QR Code PIX
-    generatePixQRCode: function(value, pixKey) {
-        // Gerar payload PIX simplificado
-        const payload = this.generatePixPayload(pixKey, value);
-        
-        // Usar API do QR Server para gerar QR Code
-        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(payload)}`;
-        
-        return qrCodeUrl;
-    },
-    
-    // Função para gerar payload PIX básico
-    generatePixPayload: function(pixKey, value) {
-        // Payload PIX simplificado para demonstração
-        // Em produção, usar biblioteca específica para PIX
-        const merchantName = "DOCE ENCANTO";
-        const merchantCity = "SAO PAULO";
+    // Função para gerar payload PIX completo
+    generatePixPayload: function(value) {
+        const merchantName = this.pixName.toUpperCase();
+        const merchantCity = this.pixCity.toUpperCase();
         const txid = this.generateTxId();
+        const pixKey = this.pixKey;
         
-        // Formato básico do payload PIX
-        let payload = "00020126";
-        payload += "580014BR.GOV.BCB.PIX";
-        payload += `01${pixKey.length.toString().padStart(2, '0')}${pixKey}`;
-        payload += `52040000`;
-        payload += `5303986`;
-        payload += `54${value.toFixed(2).replace('.', '').padStart(10, '0')}`;
-        payload += `5802BR`;
-        payload += `59${merchantName.length.toString().padStart(2, '0')}${merchantName}`;
-        payload += `60${merchantCity.length.toString().padStart(2, '0')}${merchantCity}`;
-        payload += `62${(4 + txid.length).toString().padStart(2, '0')}05${txid.length.toString().padStart(2, '0')}${txid}`;
-        payload += "6304";
+        // Construir payload PIX seguindo o padrão EMV
+        let payload = '';
         
-        // Calcular CRC16 (simplificado)
+        // Payload Format Indicator
+        payload += '00020126';
+        
+        // Merchant Account Information
+        payload += '26';
+        const pixData = `0014BR.GOV.BCB.PIX01${pixKey.length.toString().padStart(2, '0')}${pixKey}`;
+        payload += pixData.length.toString().padStart(2, '0') + pixData;
+        
+        // Merchant Category Code
+        payload += '52040000';
+        
+        // Transaction Currency
+        payload += '5303986';
+        
+        // Transaction Amount
+        const amount = value.toFixed(2);
+        payload += '54' + amount.length.toString().padStart(2, '0') + amount;
+        
+        // Country Code
+        payload += '5802BR';
+        
+        // Merchant Name
+        payload += '59' + merchantName.length.toString().padStart(2, '0') + merchantName;
+        
+        // Merchant City
+        payload += '60' + merchantCity.length.toString().padStart(2, '0') + merchantCity;
+        
+        // Additional Data Field Template
+        const additionalData = '05' + txid.length.toString().padStart(2, '0') + txid;
+        payload += '62' + additionalData.length.toString().padStart(2, '0') + additionalData;
+        
+        // CRC16
+        payload += '6304';
         const crc = this.calculateCRC16(payload);
         payload += crc;
         
@@ -44,13 +56,11 @@ const PixModule = {
     
     // Função para gerar ID da transação
     generateTxId: function() {
-        return Math.random().toString(36).substring(2, 15);
+        return Math.random().toString(36).substring(2, 15).toUpperCase();
     },
     
-    // Função simplificada para calcular CRC16
+    // Função para calcular CRC16
     calculateCRC16: function(data) {
-        // Implementação simplificada do CRC16
-        // Em produção, usar biblioteca específica
         let crc = 0xFFFF;
         for (let i = 0; i < data.length; i++) {
             crc ^= data.charCodeAt(i) << 8;
@@ -67,8 +77,8 @@ const PixModule = {
     },
     
     // Função para mostrar modal PIX
-    showPixModal: function(totalValue) {
-        const qrCodeUrl = this.generatePixQRCode(totalValue, this.pixNumber);
+    showPixModal: function(totalValue, orderData = null) {
+        const pixPayload = this.generatePixPayload(totalValue);
         
         // Criar modal PIX
         const pixModalHtml = `
@@ -87,21 +97,18 @@ const PixModule = {
                                 <h4 class="text-success fw-bold">R$ ${totalValue.toFixed(2)}</h4>
                             </div>
                             
-                            <div class="pix-qr-section mb-4">
-                                <h6 class="mb-3">Escaneie o QR Code:</h6>
-                                <div class="qr-code-container">
-                                    <img src="${qrCodeUrl}" alt="QR Code PIX" class="img-fluid" style="max-width: 200px; border: 2px solid #dee2e6; border-radius: 10px;">
-                                </div>
-                            </div>
-                            
-                            <div class="pix-copy-section mb-4">
-                                <h6 class="mb-2">Ou copie o código PIX:</h6>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="pixCode" value="${this.pixNumber}" readonly>
-                                    <button class="btn btn-outline-primary" type="button" onclick="PixModule.copyPixCode()">
+                            <div class="pix-key-section mb-4">
+                                <h6 class="mb-3">Chave PIX (Copie e Cole):</h6>
+                                <div class="input-group mb-2">
+                                    <textarea class="form-control" id="pixPayload" rows="4" readonly style="font-family: monospace; font-size: 12px;">${pixPayload}</textarea>
+                                    <button class="btn btn-outline-primary" type="button" onclick="PixModule.copyPixPayload()">
                                         <i class="fas fa-copy"></i> Copiar
                                     </button>
                                 </div>
+                                <p class="text-muted mt-2">
+                                    <strong>Recebedor:</strong> ${this.pixName}<br>
+                                    <strong>Chave:</strong> ${this.pixKey}
+                                </p>
                             </div>
                             
                             <div class="pix-instructions">
@@ -111,15 +118,16 @@ const PixModule = {
                                     </h6>
                                     <ol class="mb-0 text-start">
                                         <li>Abra o app do seu banco</li>
-                                        <li>Escaneie o QR Code ou cole o código PIX</li>
-                                        <li>Confirme o pagamento</li>
+                                        <li>Escolha a opção "PIX Copia e Cola"</li>
+                                        <li>Cole o código PIX copiado acima</li>
+                                        <li>Confirme o pagamento de R$ ${totalValue.toFixed(2)}</li>
                                         <li>Envie o comprovante via WhatsApp</li>
                                     </ol>
                                 </div>
                             </div>
                             
                             <div class="whatsapp-section mt-3">
-                                <button class="btn btn-success btn-lg w-100" onclick="PixModule.sendWhatsAppMessage()">
+                                <button class="btn btn-success btn-lg w-100" onclick="PixModule.sendWhatsAppMessage(${JSON.stringify(orderData).replace(/"/g, '&quot;')})">
                                     <i class="fab fa-whatsapp me-2"></i>
                                     Enviar Comprovante via WhatsApp
                                 </button>
@@ -134,61 +142,81 @@ const PixModule = {
         `;
         
         // Remover modal anterior se existir
-        const existingModal = document.getElementById('pixModal');
+        const existingModal = document.getElementById("pixModal");
         if (existingModal) {
             existingModal.remove();
         }
         
         // Adicionar modal ao DOM
-        document.body.insertAdjacentHTML('beforeend', pixModalHtml);
+        document.body.insertAdjacentHTML("beforeend", pixModalHtml);
         
         // Mostrar modal
-        const pixModal = new bootstrap.Modal(document.getElementById('pixModal'));
+        const pixModal = new bootstrap.Modal(document.getElementById("pixModal"));
         pixModal.show();
         
         // Remover modal do DOM quando fechado
-        document.getElementById('pixModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById("pixModal").addEventListener("hidden.bs.modal", function () {
             this.remove();
         });
     },
     
-    // Função para copiar código PIX
-    copyPixCode: function() {
-        const pixCodeInput = document.getElementById('pixCode');
-        pixCodeInput.select();
-        pixCodeInput.setSelectionRange(0, 99999); // Para dispositivos móveis
+    // Função para copiar payload PIX
+    copyPixPayload: function() {
+        const pixPayloadTextarea = document.getElementById("pixPayload");
+        pixPayloadTextarea.select();
+        pixPayloadTextarea.setSelectionRange(0, 99999); // Para dispositivos móveis
         
         try {
-            document.execCommand('copy');
-            this.showNotification('Código PIX copiado!', 'success');
+            document.execCommand("copy");
+            this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
         } catch (err) {
             // Fallback para navegadores mais novos
-            navigator.clipboard.writeText(this.pixNumber).then(() => {
-                this.showNotification('Código PIX copiado!', 'success');
+            navigator.clipboard.writeText(pixPayloadTextarea.value).then(() => {
+                this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
             }).catch(() => {
-                this.showNotification('Erro ao copiar código', 'error');
+                this.showNotification("Erro ao copiar código", "error");
             });
         }
     },
     
     // Função para enviar mensagem WhatsApp
-    sendWhatsAppMessage: function() {
-        const message = `🏪 *DOCE ENCANTO* 🏪\n\n` +
-                       `💰 Realizei o pagamento via PIX no valor de R$ ${window.cartTotal.toFixed(2)}\n\n` +
-                       `📱 Chave PIX: ${this.pixNumber}\n\n` +
-                       `📄 Segue em anexo o comprovante de pagamento.\n\n` +
-                       `⏰ Aguardo confirmação do pedido!`;
+    sendWhatsAppMessage: function(orderData = null) {
+        let message = `🏪 *DOCE ENCANTO* 🏪\n\n`;
+        
+        if (orderData && orderData.items && orderData.items.length > 0) {
+            // Incluir informações do pedido
+            message += `💰 Realizei o pagamento via PIX no valor de R$ ${orderData.total.toFixed(2)}\n\n`;
+            message += `📋 *ITENS DO PEDIDO:*\n`;
+            
+            orderData.items.forEach(item => {
+                const itemName = window.CartModule ? window.CartModule.getItemDisplayName(item.name) : item.name;
+                message += `• ${item.quantity}x ${itemName} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+            
+            message += `\n📍 *DADOS PARA ENTREGA:*\n`;
+            message += `👤 Nome: ${orderData.name}\n`;
+            message += `🏠 Endereço: ${orderData.address}\n`;
+            message += `💳 Pagamento: PIX\n\n`;
+        } else {
+            // Mensagem padrão (fallback)
+            message += `💰 Realizei o pagamento via PIX no valor de R$ ${window.cartTotal ? window.cartTotal.toFixed(2) : '0.00'}\n\n`;
+        }
+        
+        message += `👤 Recebedor: ${this.pixName}\n`;
+        message += `📱 Chave PIX: ${this.pixKey}\n\n`;
+        message += `📄 Segue em anexo o comprovante de pagamento.\n\n`;
+        message += `⏰ Aguardo confirmação do pedido!`;
         
         const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/55${this.pixNumber}?text=${encodedMessage}`;
+        const whatsappUrl = `https://wa.me/55${this.pixKey}?text=${encodedMessage}`;
         
-        window.open(whatsappUrl, '_blank');
+        window.open(whatsappUrl, "_blank");
     },
     
     // Função para mostrar notificações
-    showNotification: function(message, type = 'info') {
-        const notification = document.createElement('div');
-        const bgColor = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8';
+    showNotification: function(message, type = "info") {
+        const notification = document.createElement("div");
+        const bgColor = type === "success" ? "#28a745" : type === "error" ? "#dc3545" : "#17a2b8";
         
         notification.style.cssText = `
             position: fixed;
@@ -207,24 +235,24 @@ const PixModule = {
             max-width: 300px;
         `;
         
-        notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        notification.innerHTML = `<i class="fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i> ${message}`;
         
         document.body.appendChild(notification);
         
         // Animar entrada
         setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
+            notification.style.transform = "translateX(0)";
         }, 100);
         
-        // Remover após 3 segundos
+        // Remover após 4 segundos
         setTimeout(() => {
-            notification.style.transform = 'translateX(400px)';
+            notification.style.transform = "translateX(400px)";
             setTimeout(() => {
                 if (document.body.contains(notification)) {
                     document.body.removeChild(notification);
                 }
             }, 300);
-        }, 3000);
+        }, 4000);
     }
 };
 
