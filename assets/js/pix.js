@@ -1,24 +1,26 @@
-// Módulo PIX - Funcionalidades de pagamento via PIX
 const PixModule = {
-    // Dados do recebedor PIX
-    pixKey: '22801230880',  // chave atualizada
+    // Chave para pagamento PIX (ex: CPF, telefone, e-mail, ou EVP)
+    pixPaymentKey: '22801230880',
+    
+    // Dados do recebedor
     pixName: 'Bruno Mariano Silva',
     pixCity: 'Joinville',
-
-    // Função para gerar payload PIX completo
+    
+    // Número para WhatsApp (usar para enviar comprovante)
+    whatsappNumber: '47991597258',
+    
+    // Função para gerar payload PIX completo para pagamento
     generatePixPayload: function(value) {
         const merchantName = this.pixName.toUpperCase();
         const merchantCity = this.pixCity.toUpperCase();
         const txid = this.generateTxId();
         const amount = value.toFixed(2);
 
-        // Função para montar campo EMV
-        const emv = (id, value) =>
-            id + value.length.toString().padStart(2, '0') + value;
+        const emv = (id, val) => id + val.length.toString().padStart(2, '0') + val;
 
         // Merchant Account Information (ID 26)
         const gui = emv("00", "BR.GOV.BCB.PIX");
-        const key = emv("01", this.pixKey);
+        const key = emv("01", this.pixPaymentKey);
         const description = emv("02", "Pagamento"); // Opcional
         const merchantAccountInfo = gui + key + description;
         const field26 = emv("26", merchantAccountInfo);
@@ -40,11 +42,8 @@ const PixModule = {
         const crc = this.calculateCRC16(fullPayload);
         return fullPayload + crc;
     },
-
-    // Função para gerar ID da transação
+    
     generateTxId: function() {
-        // O txid deve ter entre 26 e 35 caracteres alfanuméricos (a-z, A-Z, 0-9)
-        // Gerar um UUID v4 e remover os hífens para ter um txid válido
         const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             const r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -52,8 +51,7 @@ const PixModule = {
         });
         return uuid.replace(/-/g, '').toUpperCase();
     },
-
-    // Função para calcular CRC16
+    
     calculateCRC16: function(data) {
         let crc = 0xFFFF;
         for (let i = 0; i < data.length; i++) {
@@ -69,12 +67,10 @@ const PixModule = {
         }
         return crc.toString(16).toUpperCase().padStart(4, '0');
     },
-
-    // Função para mostrar modal PIX
+    
     showPixModal: function(totalValue, orderData = null) {
         const pixPayload = this.generatePixPayload(totalValue);
-
-        // Criar modal PIX
+        
         const pixModalHtml = `
             <div class="modal fade" id="pixModal" tabindex="-1" aria-labelledby="pixModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -90,7 +86,7 @@ const PixModule = {
                                 <h6 class="text-primary">Valor a pagar:</h6>
                                 <h4 class="text-success fw-bold">R$ ${totalValue.toFixed(2)}</h4>
                             </div>
-
+                            
                             <div class="pix-key-section mb-4">
                                 <h6 class="mb-3">Chave PIX (Copie e Cole):</h6>
                                 <div class="input-group mb-2">
@@ -101,10 +97,10 @@ const PixModule = {
                                 </div>
                                 <p class="text-muted mt-2">
                                     <strong>Recebedor:</strong> ${this.pixName}<br>
-                                    <strong>Chave:</strong> ${this.pixKey}
+                                    <strong>Chave:</strong> ${this.pixPaymentKey}
                                 </p>
                             </div>
-
+                            
                             <div class="pix-instructions">
                                 <div class="alert alert-info">
                                     <h6 class="alert-heading">
@@ -119,7 +115,7 @@ const PixModule = {
                                     </ol>
                                 </div>
                             </div>
-
+                            
                             <div class="whatsapp-section mt-3">
                                 <button class="btn btn-success btn-lg w-100" onclick="PixModule.sendWhatsAppMessage(${JSON.stringify(orderData).replace(/"/g, '&quot;')})">
                                     <i class="fab fa-whatsapp me-2"></i>
@@ -134,37 +130,28 @@ const PixModule = {
                 </div>
             </div>
         `;
-
-        // Remover modal anterior se existir
+        
         const existingModal = document.getElementById("pixModal");
-        if (existingModal) {
-            existingModal.remove();
-        }
-
-        // Adicionar modal ao DOM
+        if (existingModal) existingModal.remove();
+        
         document.body.insertAdjacentHTML("beforeend", pixModalHtml);
-
-        // Mostrar modal
+        
         const pixModal = new bootstrap.Modal(document.getElementById("pixModal"));
         pixModal.show();
-
-        // Remover modal do DOM quando fechado
+        
         document.getElementById("pixModal").addEventListener("hidden.bs.modal", function () {
             this.remove();
         });
     },
-
-    // Função para copiar payload PIX
+    
     copyPixPayload: function() {
         const pixPayloadTextarea = document.getElementById("pixPayload");
         pixPayloadTextarea.select();
-        pixPayloadTextarea.setSelectionRange(0, 99999); // Para dispositivos móveis
-
+        pixPayloadTextarea.setSelectionRange(0, 99999);
         try {
             document.execCommand("copy");
             this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
-        } catch (err) {
-            // Fallback para navegadores mais novos
+        } catch {
             navigator.clipboard.writeText(pixPayloadTextarea.value).then(() => {
                 this.showNotification("Código PIX copiado! Cole no seu app bancário.", "success");
             }).catch(() => {
@@ -172,46 +159,41 @@ const PixModule = {
             });
         }
     },
-
-    // Função para enviar mensagem WhatsApp
+    
     sendWhatsAppMessage: function(orderData = null) {
         let message = `🏪 *DOCE ENCANTO* 🏪\n\n`;
-
+        
         if (orderData && orderData.items && orderData.items.length > 0) {
-            // Incluir informações do pedido
             message += `💰 Realizarei o pagamento via PIX no valor de R$ ${orderData.total.toFixed(2)}\n\n`;
             message += `📋 *ITENS DO PEDIDO:*\n`;
-
+            
             orderData.items.forEach(item => {
                 const itemName = window.CartModule ? window.CartModule.getItemDisplayName(item.name) : item.name;
                 message += `• ${item.quantity}x ${itemName} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
             });
-
+            
             message += `\n📍 *DADOS PARA ENTREGA:*\n`;
             message += `👤 Nome: ${orderData.name}\n`;
             message += `🏠 Endereço: ${orderData.address}\n`;
             message += `💳 Pagamento: PIX\n\n`;
         } else {
-            // Mensagem padrão (fallback)
             message += `💰 Realizarei o pagamento via PIX no valor de R$ ${window.cartTotal ? window.cartTotal.toFixed(2) : '0.00'}\n\n`;
         }
-
+        
         message += `👤 Recebedor: ${this.pixName}\n`;
-        message += `📱 Chave PIX: ${this.pixKey}\n\n`;
+        message += `📱 Chave PIX: ${this.pixPaymentKey}\n\n`;
         message += `📄 Segue em anexo o comprovante de pagamento.\n\n`;
         message += `⏰ Aguardo confirmação do pedido!`;
-
+        
         const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/55${this.pixKey}?text=${encodedMessage}`;
-
+        const whatsappUrl = `https://wa.me/55${this.whatsappNumber}?text=${encodedMessage}`;
+        
         window.open(whatsappUrl, "_blank");
     },
-
-    // Função para mostrar notificações
+    
     showNotification: function(message, type = "info") {
         const notification = document.createElement("div");
         const bgColor = type === "success" ? "#28a745" : type === "error" ? "#dc3545" : "#17a2b8";
-
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -228,17 +210,9 @@ const PixModule = {
             font-weight: 500;
             max-width: 300px;
         `;
-
         notification.innerHTML = `<i class="fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i> ${message}`;
-
         document.body.appendChild(notification);
-
-        // Animar entrada
-        setTimeout(() => {
-            notification.style.transform = "translateX(0)";
-        }, 100);
-
-        // Remover após 4 segundos
+        setTimeout(() => { notification.style.transform = "translateX(0)"; }, 100);
         setTimeout(() => {
             notification.style.transform = "translateX(400px)";
             setTimeout(() => {
@@ -250,5 +224,4 @@ const PixModule = {
     }
 };
 
-// Exportar módulo para uso global
 window.PixModule = PixModule;
