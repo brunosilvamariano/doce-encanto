@@ -105,13 +105,24 @@ const CheckoutModule = {
         }
         enderecoCompleto += `, ${neighborhood}, ${city} - ${state}, CEP: ${cep}`;
         
+        // Validar entrega antes de finalizar o pedido
+        const deliveryResult = DeliveryModule.validarEntrega(neighborhood, city);
+        if (!deliveryResult.canDeliver) {
+            alert(deliveryResult.message + " Por favor, entre em contato via WhatsApp para finalizar o pedido.");
+            return;
+        }
+
+        // Se a entrega for válida, adicionar a taxa de entrega ao total do pedido
+        let finalTotal = window.cartTotal + deliveryResult.deliveryFee;
+
         // Salvar dados do pedido globalmente para uso no PIX
         window.orderData = {
             name,
             address: enderecoCompleto,
             paymentMethod,
-            total: window.cartTotal,
-            items: [...window.cart]
+            total: finalTotal,
+            items: [...window.cart],
+            deliveryFee: deliveryResult.deliveryFee
         };
         
         // Verificar se o pagamento é PIX

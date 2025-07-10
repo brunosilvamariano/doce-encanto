@@ -69,6 +69,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/delivery.css">
     
     <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
@@ -177,7 +178,10 @@
                                 <i class="fas fa-cake-candles"></i>
                                 <span>Bolo de Pote</span>
                             </button>
-                        </div>
+                            <button class="category-btn" onclick="showCategory('chococroc')">
+                                <i class="fas fa-cookie-bite"></i>
+                                <span>ChocoCroc</span>
+                            </button>                        </div>
                     </div>
                 </div>
             </section>
@@ -343,6 +347,87 @@
                     </div>
                 </div>
             </section>
+
+            <!-- ChocoCroc Section -->
+            <section class="menu-section" id="chococroc" style="display: none;">
+                <div class="section-header text-center mb-5">
+                    <h2 class="section-title">ChocoCroc</h2>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="menu-item-card">
+                            <div class="item-image">
+                                <img src="assets/images/chococroc.jpg" alt="ChocoCroc" class="food-photo">
+                            </div>
+                            <div class="item-content">
+                                <h3 class="item-title">ChocoCroc Chocolate</h3>
+                                <p class="item-description">Cubinhos de batata de purê com recheio de chocolate cremoso.</p>
+                                <div class="item-footer">
+                                    <span class="item-price">R$ 15,00</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('chococroc-chocolate', 15.00)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 col-md-6">
+                        <div class="menu-item-card">
+                            <div class="item-image">
+                                <img src="assets/images/chococroc_caramelo.jpg" alt="ChocoCroc Caramelo" class="food-photo">
+                            </div>
+                            <div class="item-content">
+                                <h3 class="item-title">ChocoCroc Caramelo</h3>
+                                <p class="item-description">Cubinhos de batata de purê com recheio de caramelo derretido.</p>
+                                <div class="item-footer">
+                                    <span class="item-price">R$ 16,00</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('chococroc-caramelo', 16.00)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 col-md-6">
+                        <div class="menu-item-card">
+                            <div class="item-image">
+                                <img src="assets/images/chococroc_morango.jpg" alt="ChocoCroc Morango" class="food-photo">
+                            </div>
+                            <div class="item-content">
+                                <h3 class="item-title">ChocoCroc Morango</h3>
+                                <p class="item-description">Cubinhos de batata de purê com recheio de geleia de morango.</p>
+                                <div class="item-footer">
+                                    <span class="item-price">R$ 15,50</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('chococroc-morango', 15.50)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 col-md-6">
+                        <div class="menu-item-card">
+                            <div class="item-image">
+                                <img src="assets/images/chococroc_doce_leite.jpg" alt="ChocoCroc Doce de Leite" class="food-photo">
+                            </div>
+                            <div class="item-content">
+                                <h3 class="item-title">ChocoCroc Doce de Leite</h3>
+                                <p class="item-description">Cubinhos de batata de purê com recheio de doce de leite cremoso.</p>
+                                <div class="item-footer">
+                                    <span class="item-price">R$ 15,50</span>
+                                    <button class="btn-add-to-cart" onclick="addToCart('chococroc-doce-leite', 15.50)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -412,10 +497,14 @@
                                 
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <div class="mb-3">
-                                            <label for="customerNeighborhood" class="form-label">Bairro</label>
-                                            <input type="text" class="form-control" id="customerNeighborhood" required readonly>
-                                        </div>
+                                <div class="mb-3">
+                                    <label for="customerNeighborhood" class="form-label">Bairro</label>
+                                    <input type="text" class="form-control" id="customerNeighborhood" required readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deliveryInfo" class="form-label">Informações de Entrega</label>
+                                    <input type="text" class="form-control" id="deliveryInfo" readonly>
+                                </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
@@ -568,4 +657,28 @@
     <script src="assets/js/script.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+<!-- Delivery Info Modal -->
+<div class="modal fade" id="deliveryInfoModal" tabindex="-1" aria-labelledby="deliveryInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deliveryInfoModalLabel">Informações de Entrega</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="deliveryMessage"></p>
+                <button class="btn btn-success w-100" id="whatsappContactBtn">
+                    <i class="fab fa-whatsapp"></i> Entrar em Contato via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 

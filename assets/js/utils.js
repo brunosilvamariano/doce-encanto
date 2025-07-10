@@ -58,10 +58,34 @@ const UtilsModule = {
                     .then(response => response.json())
                     .then(data => {
                         if (!data.erro) {
-                            document.getElementById('customerStreet').value = data.logradouro;
-                            document.getElementById('customerNeighborhood').value = data.bairro;
-                            document.getElementById('customerCity').value = data.localidade;
-                            document.getElementById('customerState').value = data.uf;
+                            document.getElementById("customerStreet").value = data.logradouro;
+                            document.getElementById("customerNeighborhood").value = data.bairro;
+                            document.getElementById("customerCity").value = data.localidade;
+                            document.getElementById("customerState").value = data.uf;
+
+                            // Validar entrega após preencher os campos
+                            const deliveryResult = DeliveryModule.validarEntrega(data.bairro, data.localidade);
+                            const deliveryInfoInput = document.getElementById("deliveryInfo");
+                            const checkoutButton = document.querySelector(".checkout-btn");
+
+                            if (deliveryResult.canDeliver) {
+                                deliveryInfoInput.value = `Taxa de Entrega: R$ ${deliveryResult.deliveryFee.toFixed(2)}`;
+                                deliveryInfoInput.style.color = "green";
+                                if (checkoutButton) checkoutButton.disabled = false;
+                            } else {
+                                deliveryInfoInput.value = deliveryResult.message;
+                                deliveryInfoInput.style.color = "red";
+                                if (checkoutButton) checkoutButton.disabled = true;
+                                // Abrir modal de informações de entrega
+                                const deliveryInfoModal = new bootstrap.Modal(document.getElementById("deliveryInfoModal"));
+                                document.getElementById("deliveryMessage").textContent = deliveryResult.message;
+                                document.getElementById("whatsappContactBtn").onclick = () => {
+                                    const whatsappNumber = "5547991597258";
+                                    const whatsappMessage = encodeURIComponent(`Olá! Gostaria de saber mais sobre a entrega para o bairro ${data.bairro}, ${data.localidade}. Meu pedido mínimo é de R$ ${deliveryResult.minOrder.toFixed(2)}.`);
+                                    window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, "_blank");
+                                };
+                                deliveryInfoModal.show();
+                            }
                         } else {
                             this.limpaFormularioCep();
                             alert("CEP não encontrado.");
@@ -190,4 +214,84 @@ function smoothScroll(target) {
 
 // Exportar módulo para uso global
 window.UtilsModule = UtilsModule;
+
+
+
+
+// Lógica de validação de entrega
+const DeliveryModule = {
+    // Grupos de bairros atendidos
+    GROUPS: {
+        COMASA: {
+            name: 'Comasa',
+            tax: 10.99,
+            minOrder: 0, // Não há pedido mínimo para entrega regular
+            neighborhoods: ['Iririú', 'Aventureiro', 'Boa Vista', 'Espinheiros', 'Bucarein', 'Centro', 'Paranaguamirim', 'Itinga']
+        },
+        BOEHMERWALD: {
+            name: 'Boehmerwald',
+            tax: 12.99,
+            minOrder: 0, // Não há pedido mínimo para entrega regular
+            neighborhoods: ['Boehmerwald', 'Itinga', 'Paranaguamirim', 'Floresta', 'Guanabara', 'Bucarein', 'Centro', 'Aventureiro', 'Boa Vista']
+        }
+    },
+
+    // Bairros de outras cidades que atendemos sob encomenda
+    OTHER_CITIES_NEIGHBORHOODS: [
+        'Jaraguá do Sul', 'Schroeder', 'São Francisco', 'Garuva', 'Araquari', 'Pirabeiraba'
+    ],
+
+    // Função principal de validação de entrega
+    validarEntrega: function(bairroCliente, cidadeCliente) {
+        const normalizedBairro = bairroCliente.normalize("NFD").replace(/[^\w\s]/g, "").toLowerCase();
+        const normalizedCidade = cidadeCliente.normalize("NFD").replace(/[^\w\s]/g, "").toLowerCase();
+
+        // 1. Verificar grupos de bairros atendidos
+        for (const groupKey in this.GROUPS) {
+            const group = this.GROUPS[groupKey];
+            const normalizedGroupNeighborhoods = group.neighborhoods.map(n => n.normalize("NFD").replace(/[^\w\s]/g, "").toLowerCase());
+            if (normalizedGroupNeighborhoods.includes(normalizedBairro)) {
+                return {
+                    canDeliver: true,
+                    deliveryFee: group.tax,
+                    minOrder: group.minOrder,
+                    message: `Seu bairro (${bairroCliente}) está na nossa área de entrega regular. Taxa de entrega: R$ ${group.tax.toFixed(2)}.`
+                };
+            }
+        }
+
+        // 2. Verificar bairros de Joinville fora dos grupos (sob encomenda)
+        if (normalizedCidade === 'joinville') {
+            return {
+                canDeliver: false,
+                deliveryFee: 0,
+                minOrder: 80.00,
+                message: `Este bairro (${bairroCliente}) está fora da nossa área de entrega regular em Joinville. Atendemos somente por encomenda com pedido mínimo de R$ 80,00.`
+            };
+        }
+
+        // 3. Verificar bairros de outras cidades (sob encomenda)
+        if (this.OTHER_CITIES_NEIGHBORHOODS.map(n => n.normalize("NFD").replace(/[^\w\s]/g, "").toLowerCase()).includes(normalizedBairro) || normalizedCidade !== 'joinville') {
+            return {
+                canDeliver: false,
+                deliveryFee: 0,
+                minOrder: 150.00,
+                message: `Este bairro (${bairroCliente}, ${cidadeCliente}) está fora da nossa área de entrega regular. Atendemos somente por encomenda com pedido mínimo de R$ 150,00.`
+            };
+        }
+
+        // Caso o bairro e cidade não se encaixem em nenhuma regra (pode ser um erro de digitação ou bairro desconhecido)
+        return {
+            canDeliver: false,
+            deliveryFee: 0,
+            minOrder: 0,
+            message: `Não conseguimos validar a entrega para o bairro ${bairroCliente}, ${cidadeCliente}. Por favor, verifique o CEP ou entre em contato.`
+        };
+    }
+};
+
+// Expor a função validarEntrega globalmente para ser acessível no HTML e outros scripts
+window.validarEntrega = DeliveryModule.validarEntrega;
+window.DeliveryModule = DeliveryModule;
+
 
