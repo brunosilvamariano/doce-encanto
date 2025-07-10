@@ -226,7 +226,7 @@ const DeliveryModule = {
             name: 'Comasa',
             tax: 10.99,
             minOrder: 0, // Não há pedido mínimo para entrega regular
-            neighborhoods: ['Iririú', 'Jardim Iririú', 'Aventureiro', 'Boa Vista', 'Espinheiros', 'Bucarein', 'Centro', 'Paranaguamirim', 'Itinga']
+            neighborhoods: ['Iririú', 'Jardim Iririú', 'Comasa', 'Aventureiro', 'Boa Vista', 'Espinheiros', 'Bucarein', 'Centro', 'Paranaguamirim', 'Itinga']
         },
         BOEHMERWALD: {
             name: 'Boehmerwald',
