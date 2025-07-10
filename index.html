@@ -457,7 +457,7 @@
 
     <!-- Checkout Modal -->
     <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="checkoutModalLabel">Finalizar Pedido</h5>
@@ -465,168 +465,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <!-- Adicionar Mais Itens -->
-                        <div class="col-md-4">
-                            <h6 class="mb-3">Adicionar Mais Itens</h6>
-                            <div class="quick-add-menu" style="max-height: 400px; overflow-y: auto;">
-                                <div class="mb-3">
-                                    <h6 class="text-primary">Brigadeiros</h6>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Brigadeiro Tradicional</strong>
-                                                <br><small class="text-muted">R$ 12,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('caixinha-brigadeiro-tradicional', 12.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Brigadeiro de Coco</strong>
-                                                <br><small class="text-muted">R$ 12,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('caixinha-brigadeiro-coco', 12.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Brigadeiro de Churros</strong>
-                                                <br><small class="text-muted">R$ 12,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('caixinha-brigadeiro-churros', 12.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Brigadeiro de Limão</strong>
-                                                <br><small class="text-muted">R$ 12,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('caixinha-brigadeiro-limao', 12.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <h6 class="text-primary">Bolos de Pote</h6>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Bolo de Pote Chocolate</strong>
-                                                <br><small class="text-muted">R$ 8,50</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('bolo-pote-chocolate', 8.50)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Bolo de Pote Morango</strong>
-                                                <br><small class="text-muted">R$ 9,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('bolo-pote-morango', 9.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Bolo de Pote Doce de Leite</strong>
-                                                <br><small class="text-muted">R$ 8,80</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('bolo-pote-doce-leite', 8.80)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>Bolo de Pote Limão</strong>
-                                                <br><small class="text-muted">R$ 8,50</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('bolo-pote-limao', 8.50)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <h6 class="text-primary">ChocoCroc</h6>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>ChocoCroc Chocolate</strong>
-                                                <br><small class="text-muted">R$ 15,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('chococroc-chocolate', 15.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>ChocoCroc Caramelo</strong>
-                                                <br><small class="text-muted">R$ 16,00</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('chococroc-caramelo', 16.00)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>ChocoCroc Morango</strong>
-                                                <br><small class="text-muted">R$ 15,50</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('chococroc-morango', 15.50)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="quick-add-item">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <strong>ChocoCroc Doce de Leite</strong>
-                                                <br><small class="text-muted">R$ 15,50</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-primary" onclick="CheckoutModule.addToCartInModal('chococroc-doce-leite', 15.50)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <!-- Resumo do Pedido -->
-                        <div class="col-md-4">
+                        <div class="col-lg-6 col-md-12 mb-4">
                             <h6 class="mb-3">Resumo do Pedido</h6>
-                            <div id="orderSummary" class="order-summary" style="max-height: 400px; overflow-y: auto;">
+                            <div id="orderSummary" class="order-summary" style="max-height: 400px; overflow-y: auto; background: #f8f9fa; border-radius: 10px; padding: 1.5rem;">
                                 <!-- Itens do carrinho serão inseridos aqui -->
                             </div>
-                            <div class="order-total mt-3">
+                            <div class="order-total mt-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; border-radius: 10px; text-align: center; font-size: 1.2rem;">
                                 <strong>Total: R$ <span id="modalTotal">0</span></strong>
                             </div>
                         </div>
                         
                         <!-- Formulário de Dados -->
-                        <div class="col-md-4">
+                        <div class="col-lg-6 col-md-12">
                             <h6 class="mb-3">Dados para Entrega</h6>
                             <form id="checkoutForm">
                                 <div class="mb-3">
@@ -646,14 +497,14 @@
                                 
                                 <div class="row">
                                     <div class="col-md-8">
-                                <div class="mb-3">
-                                    <label for="customerNeighborhood" class="form-label">Bairro</label>
-                                    <input type="text" class="form-control" id="customerNeighborhood" required readonly>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="deliveryInfo" class="form-label">Informações de Entrega</label>
-                                    <input type="text" class="form-control" id="deliveryInfo" readonly>
-                                </div>
+                                        <div class="mb-3">
+                                            <label for="customerNeighborhood" class="form-label">Bairro</label>
+                                            <input type="text" class="form-control" id="customerNeighborhood" required readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="deliveryInfo" class="form-label">Informações de Entrega</label>
+                                            <input type="text" class="form-control" id="deliveryInfo" readonly>
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
@@ -804,30 +655,146 @@
     <script src="assets/js/pix.js"></script>
     <script src="assets/js/status.js"></script>
     <script src="assets/js/script.js"></script>
-</body>
-</html>
 
-
-
-
-
-
-<!-- Delivery Info Modal -->
-<div class="modal fade" id="deliveryInfoModal" tabindex="-1" aria-labelledby="deliveryInfoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deliveryInfoModalLabel">Informações de Entrega</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="deliveryMessage"></p>
-                <button class="btn btn-success w-100" id="whatsappContactBtn">
-                    <i class="fab fa-whatsapp"></i> Entrar em Contato via WhatsApp
-                </button>
+    <!-- Delivery Info Modal -->
+    <div class="modal fade" id="deliveryInfoModal" tabindex="-1" aria-labelledby="deliveryInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deliveryInfoModalLabel">Informações de Entrega</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="deliveryMessage"></p>
+                    <button class="btn btn-success w-100" id="whatsappContactBtn">
+                        <i class="fab fa-whatsapp"></i> Entrar em Contato via WhatsApp
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <style>
+        /* Estilos responsivos para o modal */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .order-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding: 1.5rem 2rem;
+            justify-content: space-between;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsividade para o modal */
+        @media (max-width: 768px) {
+            .modal-dialog {
+                margin: 1rem;
+                max-width: none;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+            
+            .modal-body .row {
+                flex-direction: column-reverse;
+            }
+            
+            .modal-body .col-lg-6 {
+                margin-bottom: 1.5rem;
+            }
+            
+            .order-summary {
+                max-height: 200px;
+            }
+        }
+    </style>
+</body>
+</html>
 
