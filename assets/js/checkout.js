@@ -38,22 +38,67 @@ const CheckoutModule = {
         }
         
         orderSummary.innerHTML = window.cart.map(item => `
-            <div class="order-item d-flex justify-content-between align-items-center mb-2">
+            <div class="order-item d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
                 <div>
                     <strong>${CartModule.getItemDisplayName(item.name)}</strong>
                     <br>
-                    <small class="text-muted">${item.quantity}x R$ ${item.price.toFixed(2)}</small>
+                    <small class="text-muted">R$ ${item.price.toFixed(2)} cada</small>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <strong>R$ ${(item.price * item.quantity).toFixed(2)}</strong>
-                    <button class="btn btn-sm btn-outline-danger" onclick="CheckoutModule.removeFromCartAndUpdateModal('${item.name}')" title="Remover item">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div class="quantity-controls d-flex align-items-center gap-1">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="CheckoutModule.changeQuantityInModal('${item.name}', -1)" title="Diminuir quantidade">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="quantity-display px-2">${item.quantity}</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="CheckoutModule.changeQuantityInModal('${item.name}', 1)" title="Aumentar quantidade">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="text-end">
+                        <strong>R$ ${(item.price * item.quantity).toFixed(2)}</strong>
+                        <br>
+                        <button class="btn btn-sm btn-outline-danger" onclick="CheckoutModule.removeFromCartAndUpdateModal('${item.name}')" title="Remover item">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `).join('');
         
-        modalTotal.textContent = window.cartTotal.toFixed(2);
+        // Calcular o total com a taxa de entrega
+        let currentTotal = window.cartTotal;
+        const customerNeighborhood = document.getElementById("customerNeighborhood").value.trim();
+        const customerCity = document.getElementById("customerCity").value.trim();
+
+        if (customerNeighborhood && customerCity) {
+            const deliveryResult = DeliveryModule.validarEntrega(customerNeighborhood, customerCity);
+            if (deliveryResult.canDeliver) {
+                currentTotal += deliveryResult.deliveryFee;
+            }
+        }
+        
+        modalTotal.textContent = currentTotal.toFixed(2);
+    },
+    
+    // Função para alterar quantidade de item no modal
+    changeQuantityInModal: function(itemName, change) {
+        CartModule.changeQuantity(itemName, change);
+        this.updateOrderSummary();
+        
+        // Se o carrinho ficar vazio, fechar o modal
+        if (window.cart.length === 0) {
+            const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+            if (checkoutModal) {
+                checkoutModal.hide();
+            }
+            alert('Carrinho vazio! O modal foi fechado.');
+        }
+    },
+    
+    // Função para adicionar item ao carrinho dentro do modal
+    addToCartInModal: function(itemName, price) {
+        CartModule.addToCart(itemName, price);
+        this.updateOrderSummary();
     },
     
     // Função para remover item do carrinho e atualizar modal
@@ -146,7 +191,7 @@ const CheckoutModule = {
         }
         
         // Para outros métodos de pagamento, continuar com o fluxo normal
-        this.sendWhatsAppOrder(name, enderecoCompleto, paymentMethod);
+        this.sendWhatsAppOrder(name, enderecoCompleto, paymentMethod, finalTotal);
         
         // Limpar carrinho e fechar modal
         CartModule.clearCart();
@@ -163,7 +208,7 @@ const CheckoutModule = {
     },
     
     // Função para enviar pedido via WhatsApp
-    sendWhatsAppOrder: function(name, address, paymentMethod) {
+    sendWhatsAppOrder: function(name, address, paymentMethod, finalTotal) {
         // Criar mensagem do pedido para WhatsApp
         let message = '🍰 *NOVO PEDIDO - DOCE ENCANTO* 🍰\n\n';
         message += '📋 *ITENS DO PEDIDO:*\n';
@@ -172,7 +217,7 @@ const CheckoutModule = {
             message += `• ${item.quantity}x ${CartModule.getItemDisplayName(item.name)} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
         });
         
-        message += `\n💰 *TOTAL: R$ ${window.cartTotal.toFixed(2)}*\n\n`;
+        message += `\n💰 *TOTAL: R$ ${finalTotal.toFixed(2)}*\n\n`;
         message += '📍 *DADOS PARA ENTREGA:*\n';
         message += `👤 Nome: ${name}\n`;
         message += `🏠 Endereço: ${address}\n`;
