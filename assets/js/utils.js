@@ -226,7 +226,7 @@ const DeliveryModule = {
             name: 'Comasa',
             tax: 10.99,
             minOrder: 0, // Não há pedido mínimo para entrega regular
-            neighborhoods: ['Iririú', 'Aventureiro', 'Boa Vista', 'Espinheiros', 'Bucarein', 'Centro', 'Paranaguamirim', 'Itinga']
+            neighborhoods: ['Iririú', 'Jardim Iririú', 'Aventureiro', 'Boa Vista', 'Espinheiros', 'Bucarein', 'Centro', 'Paranaguamirim', 'Itinga']
         },
         BOEHMERWALD: {
             name: 'Boehmerwald',
@@ -265,8 +265,8 @@ const DeliveryModule = {
             return {
                 canDeliver: false,
                 deliveryFee: 0,
-                minOrder: 80.00,
-                message: `Este bairro (${bairroCliente}) está fora da nossa área de entrega regular em Joinville. Atendemos somente por encomenda com pedido mínimo de R$ 80,00.`
+                minOrder: 100.00,
+                message: `Este bairro (${bairroCliente}) está fora da nossa área de entrega regular em Joinville. Atendemos somente por encomenda com pedido mínimo de R$ 100,00.`
             };
         }
 
@@ -275,8 +275,8 @@ const DeliveryModule = {
             return {
                 canDeliver: false,
                 deliveryFee: 0,
-                minOrder: 150.00,
-                message: `Este bairro (${bairroCliente}, ${cidadeCliente}) está fora da nossa área de entrega regular. Atendemos somente por encomenda com pedido mínimo de R$ 150,00.`
+                minOrder: 190.00,
+                message: `Este bairro (${bairroCliente}, ${cidadeCliente}) está fora da nossa área de entrega regular. Atendemos somente por encomenda com pedido mínimo de R$ 190,00.`
             };
         }
 
