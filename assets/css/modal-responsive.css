@@ -1,0 +1,505 @@
+/* Responsividade dos modais */
+
+/* Responsividade para modais de notificação e login requerido */
+@media (max-width: 768px) {
+    .notification-modal .modal-dialog,
+    .login-required-modal .modal-dialog {
+        margin: 1rem;
+        max-width: none;
+    }
+    
+    .notification-modal .modal-header,
+    .login-required-modal .modal-header {
+        padding: 1.5rem 1.5rem 0.5rem;
+    }
+    
+    .notification-modal .modal-body,
+    .login-required-modal .modal-body {
+        padding: 1rem 1.5rem 1.5rem;
+    }
+    
+    .notification-modal .modal-footer,
+    .login-required-modal .modal-footer {
+        padding: 1rem 1.5rem 1.5rem;
+        flex-direction: column;
+    }
+    
+    .notification-title,
+    .login-required-title {
+        font-size: 1.3rem;
+    }
+    
+    .notification-icon,
+    .login-required-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .notification-message,
+    .login-required-message {
+        font-size: 1rem;
+    }
+    
+    .notification-btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .notification-btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .notification-modal .modal-dialog,
+    .login-required-modal .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .notification-modal .modal-header,
+    .login-required-modal .modal-header {
+        padding: 1rem 1rem 0.5rem;
+    }
+    
+    .notification-modal .modal-body,
+    .login-required-modal .modal-body {
+        padding: 0.5rem 1rem 1rem;
+    }
+    
+    .notification-modal .modal-footer,
+    .login-required-modal .modal-footer {
+        padding: 0.5rem 1rem 1rem;
+    }
+    
+    .notification-title,
+    .login-required-title {
+        font-size: 1.2rem;
+    }
+    
+    .notification-icon,
+    .login-required-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .notification-message,
+    .login-required-message {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .notification-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-close {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .notification-modal .modal-dialog,
+    .login-required-modal .modal-dialog {
+        margin: 0.25rem;
+    }
+    
+    .notification-modal .modal-content,
+    .login-required-modal .modal-content {
+        border-radius: 15px;
+    }
+    
+    .notification-title,
+    .login-required-title {
+        font-size: 1.1rem;
+    }
+    
+    .notification-icon,
+    .login-required-icon {
+        font-size: 2rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .notification-message,
+    .login-required-message {
+        font-size: 0.9rem;
+    }
+    
+    .notification-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        min-width: 100px;
+    }
+}
+
+/* Responsividade do modal de login */
+@media (max-width: 768px) {
+    #loginModal .modal-dialog {
+        margin: 1rem;
+        max-width: none;
+    }
+    
+    #loginModal .modal-header {
+        padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    #loginModal .modal-body {
+        padding: 1.5rem;
+    }
+    
+    #loginModal .modal-title {
+        font-size: 1.4rem;
+    }
+    
+    #loginModal .form-control {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.95rem;
+    }
+    
+    #loginModal .btn-primary,
+    #loginModal .btn-success,
+    #loginModal .btn-secondary {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        width: 100%;
+    }
+    
+    #loginModal .input-group .btn {
+        padding: 0.7rem 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #loginModal .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    #loginModal .modal-header {
+        padding: 1rem 1rem 0.5rem;
+    }
+    
+    #loginModal .modal-body {
+        padding: 1rem;
+    }
+    
+    #loginModal .modal-title {
+        font-size: 1.3rem;
+    }
+    
+    #loginModal .form-label {
+        font-size: 0.95rem;
+    }
+    
+    #loginModal .form-control {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+    
+    #loginModal .input-group .form-control {
+        border-radius: 10px 0 0 10px;
+    }
+    
+    #loginModal .input-group .btn {
+        border-radius: 0 10px 10px 0;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    #loginModal .btn-primary,
+    #loginModal .btn-success,
+    #loginModal .btn-secondary {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+    
+    #loginModal .btn-close {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #loginModal .modal-dialog {
+        margin: 0.25rem;
+    }
+    
+    #loginModal .modal-content {
+        border-radius: 15px;
+    }
+    
+    #loginModal .modal-header {
+        border-radius: 15px 15px 0 0;
+        padding: 0.8rem 0.8rem 0.5rem;
+    }
+    
+    #loginModal .modal-body {
+        padding: 0.8rem;
+    }
+    
+    #loginModal .modal-title {
+        font-size: 1.2rem;
+    }
+    
+    #loginModal .form-label {
+        font-size: 0.9rem;
+    }
+    
+    #loginModal .form-control {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    #loginModal .input-group .form-control {
+        border-radius: 8px 0 0 8px;
+    }
+    
+    #loginModal .input-group .btn {
+        border-radius: 0 8px 8px 0;
+        padding: 0.5rem 0.7rem;
+    }
+    
+    #loginModal .btn-primary,
+    #loginModal .btn-success,
+    #loginModal .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    #loginModal .btn-close {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+    
+    #loginModal .form-text {
+        font-size: 0.8rem;
+    }
+}
+
+/* Responsividade do modal de checkout */
+@media (max-width: 768px) {
+    #checkoutModal .modal-dialog {
+        margin: 1rem;
+        max-width: none;
+    }
+    
+    #checkoutModal .modal-body {
+        padding: 1.5rem;
+    }
+    
+    #checkoutModal .modal-body .row {
+        flex-direction: column-reverse;
+    }
+    
+    #checkoutModal .modal-body .col-lg-6 {
+        margin-bottom: 1.5rem;
+    }
+    
+    #checkoutModal .order-summary {
+        max-height: 200px;
+    }
+    
+    #checkoutModal .form-control,
+    #checkoutModal .form-select {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #checkoutModal .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    #checkoutModal .modal-body {
+        padding: 1rem;
+    }
+    
+    #checkoutModal .order-summary {
+        max-height: 150px;
+        padding: 1rem;
+    }
+    
+    #checkoutModal .form-control,
+    #checkoutModal .form-select {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+    
+    #checkoutModal .form-label {
+        font-size: 0.95rem;
+    }
+    
+    #checkoutModal .modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+    
+    #checkoutModal .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    #checkoutModal .btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    #checkoutModal .modal-dialog {
+        margin: 0.25rem;
+    }
+    
+    #checkoutModal .modal-content {
+        border-radius: 15px;
+    }
+    
+    #checkoutModal .modal-body {
+        padding: 0.8rem;
+    }
+    
+    #checkoutModal .order-summary {
+        padding: 0.8rem;
+    }
+    
+    #checkoutModal .form-control,
+    #checkoutModal .form-select {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    #checkoutModal .form-label {
+        font-size: 0.9rem;
+    }
+    
+    #checkoutModal .modal-footer {
+        padding: 0.8rem;
+    }
+}
+
+/* Responsividade do modal de informações nutricionais */
+@media (max-width: 768px) {
+    #nutritionModal .modal-dialog {
+        margin: 1rem;
+        max-width: none;
+    }
+    
+    #nutritionModal .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .nutrition-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #nutritionModal .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    #nutritionModal .modal-body {
+        padding: 1rem;
+    }
+    
+    .nutrition-content h6 {
+        font-size: 1rem;
+    }
+    
+    .nutrition-list li {
+        font-size: 0.9rem;
+        padding: 0.6rem 0;
+    }
+    
+    .nutrition-note {
+        padding: 0.8rem;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #nutritionModal .modal-dialog {
+        margin: 0.25rem;
+    }
+    
+    #nutritionModal .modal-content {
+        border-radius: 15px;
+    }
+    
+    #nutritionModal .modal-body {
+        padding: 0.8rem;
+    }
+    
+    .nutrition-content h6 {
+        font-size: 0.95rem;
+    }
+    
+    .nutrition-list li {
+        font-size: 0.85rem;
+        padding: 0.5rem 0;
+    }
+    
+    .nutrition-note {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Responsividade do modal de informações de entrega */
+@media (max-width: 768px) {
+    #deliveryInfoModal .modal-dialog {
+        margin: 1rem;
+        max-width: none;
+    }
+    
+    #deliveryInfoModal .modal-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #deliveryInfoModal .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    #deliveryInfoModal .modal-body {
+        padding: 1rem;
+    }
+    
+    #deliveryInfoModal .btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #deliveryInfoModal .modal-dialog {
+        margin: 0.25rem;
+    }
+    
+    #deliveryInfoModal .modal-content {
+        border-radius: 15px;
+    }
+    
+    #deliveryInfoModal .modal-body {
+        padding: 0.8rem;
+    }
+    
+    #deliveryInfoModal .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+

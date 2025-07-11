@@ -159,6 +159,15 @@
     text-align: center;
 }
 
+.items-calories{
+    display: flex;
+    justify-content: end;
+}
+
+.items-calories .item-calories{
+    color: rgba(189, 189, 189, 0.651);
+}
+
 .item-title {
     font-size: 1.4rem;
     font-weight: 600;

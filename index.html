@@ -72,6 +72,8 @@
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/delivery.css">
+    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="assets/css/modal-responsive.css">
     
     <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style">
@@ -155,11 +157,22 @@
             
             <div class="decorative-line"></div>
             
-            <!-- Cart Button Below Logo -->
-            <div class="header-cart-button mt-4" onclick="openCheckoutModal()">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Carrinho</span>
-                <span class="header-cart-count" id="headerCartCount">0</span>
+            <!-- Botões do Header - Responsivos -->
+            <div class="header-buttons-container">
+                <!-- Cart Button -->
+                <div class="header-cart-button" onclick="openCheckoutModal()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Carrinho</span>
+                    <span class="header-cart-count" id="headerCartCount">0</span>
+                </div>
+                
+                <!-- Login/User Button -->
+                <div class="header-auth-container" id="headerAuthContainer">
+                    <button class="header-login-button" id="headerLoginButton" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="fas fa-user"></i> 
+                        <span>Entrar</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -203,6 +216,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Caixinha Brigadeiro Tradicional</h3>
                                 <p class="item-description">Caixinha com 4 brigadeiros tradicionais, feitos com chocolate nobre e granulado belga.</p>
+                                <div class="items-calories">
+                                     <p class="item-calories"><strong>320 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('caixinha-brigadeiro-tradicional')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 12,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-tradicional', 12.00)">
@@ -221,6 +237,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Caixinha Brigadeiro de Coco (Beijinho)</h3>
                                 <p class="item-description">Caixinha com 4 deliciosos brigadeiros de coco fresco, cobertos com coco ralado.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"></i> <strong>340 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('caixinha-brigadeiro-coco')" title="Informações Nutricionais"></i></p>   
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 12,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-coco', 12.00)">
@@ -239,6 +258,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Caixinha Brigadeiro de Churros</h3>
                                 <p class="item-description">Caixinha com 4 brigadeiros sabor churros, com doce de leite e açúcar com canela.</p>
+                                <div class="items-calories">
+                                   <p class="item-calories"></i> <strong>350 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('caixinha-brigadeiro-churros')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 12,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-churros', 12.00)">
@@ -257,6 +279,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Caixinha Brigadeiro de Limão</h3>
                                 <p class="item-description">Caixinha com 4 refrescantes brigadeiros de limão siciliano, deliciosos e cítricos.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"></i> <strong>310 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('caixinha-brigadeiro-limao')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 12,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('caixinha-brigadeiro-limao', 12.00)">
@@ -284,6 +309,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Bolo de Pote de Chocolate</h3>
                                 <p class="item-description">Camadas de bolo de chocolate com creme de chocolate, irresistível!</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>280 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('bolo-pote-chocolate')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 8,50</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('bolo-pote-chocolate', 8.50)">
@@ -302,6 +330,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Bolo de Pote de Morango</h3>
                                 <p class="item-description">Bolo de baunilha com creme e pedaços de morango fresco.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>260 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('bolo-pote-morango')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 9,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('bolo-pote-morango', 9.00)">
@@ -320,6 +351,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Bolo de Pote de Doce de Leite</h3>
                                 <p class="item-description">Bolo de baunilha com generosas camadas de doce de leite cremoso.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>290 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('bolo-pote-doce-leite')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 8,80</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('bolo-pote-doce-leite', 8.80)">
@@ -338,6 +372,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">Bolo de Pote de Limão</h3>
                                 <p class="item-description">Refrescante bolo de limão com creme cítrico e raspas de limão.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>250 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('bolo-pote-limao')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 8,50</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('bolo-pote-limao', 8.50)">
@@ -365,6 +402,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">ChocoCroc Chocolate</h3>
                                 <p class="item-description">Cubinhos de batata de purê com recheio de chocolate cremoso.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"></i> <strong>380 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('chococroc-chocolate')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 15,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('chococroc-chocolate', 15.00)">
@@ -383,6 +423,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">ChocoCroc Caramelo</h3>
                                 <p class="item-description">Cubinhos de batata de purê com recheio de caramelo derretido.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>390 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('chococroc-caramelo')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 16,00</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('chococroc-caramelo', 16.00)">
@@ -401,6 +444,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">ChocoCroc Morango</h3>
                                 <p class="item-description">Cubinhos de batata de purê com recheio de geleia de morango.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>370 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('chococroc-morango')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 15,50</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('chococroc-morango', 15.50)">
@@ -419,6 +465,9 @@
                             <div class="item-content">
                                 <h3 class="item-title">ChocoCroc Doce de Leite</h3>
                                 <p class="item-description">Cubinhos de batata de purê com recheio de doce de leite cremoso.</p>
+                                <div class="items-calories">
+                                    <p class="item-calories"><strong>385 kcal</strong> <i class="fas fa-info-circle nutrition-info-icon" onclick="showNutritionModal('chococroc-doce-leite')" title="Informações Nutricionais"></i></p>
+                                </div>
                                 <div class="item-footer">
                                     <span class="item-price">R$ 15,50</span>
                                     <button class="btn-add-to-cart" onclick="addToCart('chococroc-doce-leite', 15.50)">
@@ -659,7 +708,102 @@
     <script src="assets/js/checkout.js"></script>
     <script src="assets/js/pix.js"></script>
     <script src="assets/js/status.js"></script>
+    <script src="assets/js/nutrition.js"></script>
+    <script src="assets/js/modal.js"></script>
     <script src="assets/js/script.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+
+    <!-- Script para funcionalidade de visualizar senha -->
+    <script>
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+
+    <!-- Login/Register Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Entrar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Login Section -->
+                    <div id="loginSection">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="loginEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Senha</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('loginPassword')">
+                                        <i id="loginPassword-icon" class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <a href="#" class="text-decoration-none">Esqueci minha senha</a>
+                        </div>
+                        <hr>
+                        <div class="text-center">
+                            <button class="btn btn-success" id="showRegister">Criar nova conta</button>
+                        </div>
+                    </div>
+
+                    <!-- Register Section -->
+                    <div id="registerSection" style="display: none;">
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="registerEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Senha</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="registerPassword" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('registerPassword')">
+                                        <i id="registerPassword-icon" class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <small class="form-text text-muted">Mínimo 6 caracteres</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmPassword')">
+                                        <i id="confirmPassword-icon" class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Criar Conta</button>
+                        </form>
+                        <hr>
+                        <div class="text-center">
+                            <button class="btn btn-secondary" id="showLogin">Já tenho uma conta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Delivery Info Modal -->
     <div class="modal fade" id="deliveryInfoModal" tabindex="-1" aria-labelledby="deliveryInfoModalLabel" aria-hidden="true">
@@ -678,6 +822,76 @@
             </div>
         </div>
     </div>
+
+    <!-- Nutrition Info Modal -->
+    <div class="modal fade" id="nutritionModal" tabindex="-1" aria-labelledby="nutritionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nutritionModalLabel">
+                        <i class="fas fa-leaf"></i> Informações Nutricionais
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="nutrition-content">
+                        <h6 id="nutritionProductName" class="mb-3"></h6>
+                        <ul class="nutrition-list" id="nutritionList">
+                            <!-- Informações nutricionais serão inseridas aqui -->
+                        </ul>
+                        <div class="nutrition-note">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i>
+                                Valores aproximados baseados em receitas padrão. Podem variar conforme ingredientes utilizados.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Notificação -->
+    <div class="modal fade notification-modal" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title notification-title" id="notificationModalLabel">Notificação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <i class="notification-icon" id="notificationIcon"></i>
+                    <p class="notification-message" id="notificationMessage">Mensagem da notificação</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn notification-btn notification-btn-primary" data-bs-dismiss="modal" id="notificationOkBtn">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login Requerido -->
+    <div class="modal fade login-required-modal" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title login-required-title" id="loginRequiredModalLabel">Login Necessário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <i class="fas fa-lock login-required-icon"></i>
+                    <p class="login-required-message">Você precisa fazer login para adicionar itens ao carrinho!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn notification-btn notification-btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn notification-btn notification-btn-primary" id="loginRequiredLoginBtn">Fazer Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay para dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
 
     <style>
         /* Estilos responsivos para o modal */
@@ -799,7 +1013,166 @@
                 max-height: 200px;
             }
         }
+
+        /* Estilos para informações de calorias */
+        .item-calories {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .item-calories i {
+            margin-right: 0.3rem;
+            color: #ff6b35;
+        }
+
+        .item-calories strong {
+            font-weight: 600;
+        }
+
+        /* Ícone de informação nutricional */
+        .nutrition-info-icon {
+            color: #6c757d;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 0.5rem;
+            opacity: 0.7;
+        }
+
+        .nutrition-info-icon:hover {
+            color: #28a745;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Estilos do modal de nutrição */
+        #nutritionModal .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        #nutritionModal .modal-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        #nutritionModal .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        #nutritionModal .modal-title i {
+            margin-right: 0.5rem;
+        }
+
+        #nutritionModal .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+
+        #nutritionModal .btn-close:hover {
+            opacity: 1;
+        }
+
+        #nutritionModal .modal-body {
+            padding: 2rem;
+        }
+
+        .nutrition-content h6 {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+        }
+
+        .nutrition-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .nutrition-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .nutrition-list li:last-child {
+            border-bottom: none;
+        }
+
+        .nutrition-list li strong {
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .nutrition-note {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1.5rem;
+        }
+
+        .nutrition-note i {
+            color: #28a745;
+            margin-right: 0.5rem;
+        }
+
+        /* Responsividade do modal de nutrição */
+        @media (max-width: 768px) {
+            #nutritionModal .modal-dialog {
+                margin: 1rem;
+                max-width: none;
+            }
+            
+            #nutritionModal .modal-body {
+                padding: 1.5rem;
+            }
+            
+            .nutrition-list li {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+        }
     </style>
 </body>
 </html>
+
+
+
+    <!-- Modal de Confirmação de Logout -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmationMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmActionButton">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 

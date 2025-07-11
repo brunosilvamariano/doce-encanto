@@ -23,6 +23,12 @@ const CartModule = {
     
     // Função para adicionar item ao carrinho
     addToCart: function(itemName, price) {
+        // Verificar se o usuário está logado
+        if (window.AuthModule && !window.AuthModule.isLoggedIn()) {
+            window.AuthModule.showLoginRequiredAlert();
+            return;
+        }
+        
         // Verificar se o restaurante está aberto
         if (window.StatusModule && !window.StatusModule.canOrder()) {
             window.StatusModule.showClosedAlert();
